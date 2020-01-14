@@ -1,0 +1,5 @@
+s3Properties:
+  endpointUrl: http://localhost:9000
+  accessKey: OU2OH4Y7W7S859X2B0FM
+  secretKey: n3IUDJsamwoezvPVqKKdpqYsKnFdjkC8ClRmFXWG
+  region:
