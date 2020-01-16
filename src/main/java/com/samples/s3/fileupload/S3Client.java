@@ -18,6 +18,10 @@ import javax.annotation.PostConstruct;
 import java.io.File;
 import java.net.URL;
 
+/**
+ * S3Client uses aws-sdk which is compatible with minio S3 and it instantiates S3 client.
+ * This utility extends all functions exposed by {@link ContentManager}
+ */
 @Service
 @Slf4j
 public class S3Client implements ContentManager {
@@ -29,7 +33,13 @@ public class S3Client implements ContentManager {
     private String accessKey;
     @Value("${s3Properties.secretKey}")
     private String secretKey;
+    @Value("${s3Properties.bucketName}")
+    private String bucketName;
 
+    /**
+     * After S3Client bean gets created, this method gets invoked to build S3Client.
+     * It uses minio S3 client.
+     */
     @PostConstruct
     private void buildS3Client() {
         AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
@@ -45,8 +55,14 @@ public class S3Client implements ContentManager {
         this.s3client = s3Client;
     }
 
+    /**
+     * Uploads file to bucket created inside minio S3 and returns the http url of uploaded content.
+     *
+     * @param file
+     * @return
+     */
     @Override
-    public String uploadFile(File file, String bucketName) {
+    public String uploadContent(File file) {
         s3client.putObject(
                 new PutObjectRequest(bucketName, file.getName(), file)
                         .withCannedAcl(CannedAccessControlList.PublicRead));
@@ -54,6 +70,4 @@ public class S3Client implements ContentManager {
         log.info("URL " + url);
         return url.toString();
     }
-
-
 }

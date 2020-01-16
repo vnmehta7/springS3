@@ -9,13 +9,16 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+/**
+ * Rest interface which exposes all API to manage the files with minio S3
+ */
 @Slf4j
 @RestController
 public class FileUploadController {
 
     @Autowired
     private ContentManager s3Client;
-    private String bucketName = "bucket";
+
 
     @GetMapping(value = "/uploadFileAndGetLocation")
     public String uploadFileAndGetLocation() {
@@ -26,7 +29,7 @@ public class FileUploadController {
         } catch (FileNotFoundException e) {
             log.error("Error", e);
         }
-        String fileUrl = s3Client.uploadFile(file, bucketName);
+        String fileUrl = s3Client.uploadContent(file);
         return fileUrl;
     }
 }
